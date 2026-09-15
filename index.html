@@ -1626,12 +1626,22 @@
 
       if (!item) return;
 
-      document.getElementById("itemDetails").innerHTML = `
-
-        <div class="detail-row">
-          <strong>Item Name</strong>
-          <span>${escapeHTML(item.name)}</span>
-        </div>
+    document.getElementById("itemDetails").innerHTML = `
+    
+      ${
+        item.photo
+          ? `<img
+              src="${item.photo}"
+              class="detail-photo"
+              alt="${escapeHTML(item.name)}"
+            >`
+          : ""
+      }
+    
+      <div class="detail-row">
+        <strong>Item Name</strong>
+        <span>${escapeHTML(item.name)}</span>
+      </div>
 
         <div class="detail-row">
           <strong>Description</strong>
@@ -1663,13 +1673,27 @@
       `;
 
       document.getElementById("contactBtn").onclick = function() {
-
-        alert(
-          "Contact feature prototype.\n\n" +
-          "Reporter: " + item.owner +
-          "\n\nIn the real system, this will open a secure way to coordinate with the reporter."
+      
+        const reporterName = item.reporterName || item.owner;
+      
+        const subject = encodeURIComponent(
+          "RTU Lost & Found - " + item.name
         );
-
+      
+        const body = encodeURIComponent(
+          "Hello " + reporterName + ",\n\n" +
+          "I would like to contact you regarding your reported item:\n\n" +
+          "Item: " + item.name + "\n" +
+          "Location: " + item.location + "\n" +
+          "Date: " + item.date + "\n\n" +
+          "Thank you!"
+        );
+      
+        window.location.href =
+          "mailto:" + item.owner +
+          "?subject=" + subject +
+          "&body=" + body;
+      
       };
 
       document.getElementById("itemModal").classList.remove("hidden");
